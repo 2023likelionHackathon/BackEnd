@@ -33,6 +33,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
 
+	// s3
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.5'
+
 	// test코드에서 lombok 사용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'

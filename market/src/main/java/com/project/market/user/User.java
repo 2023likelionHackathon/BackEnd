@@ -19,10 +19,10 @@ public class User extends BaseTimeEntity {
 
     @Column(name="user_id")
     private String userId;
-    @Column(name="email", nullable = false)
-    private String email;
     @Column(name="pw", nullable = true)
     private String pw;
+    @Column(name="email", nullable = false)
+    private String email;
     @Column(name="name", nullable = false)
     private String name;
     @Column(name="nickname", nullable = true)
