@@ -32,7 +32,7 @@ public class BoardController {
         if(multipartFiles == null){
             throw new ImageUploadException();
         }
-        List<String> imgPaths = s3Service.upload(multipartFiles);
+        List<String> imgPaths = s3Service.uploadImages(multipartFiles);
         log.info("IMG 경로 : ", imgPaths);
         String status = boardService.post(req, imgPaths);
 

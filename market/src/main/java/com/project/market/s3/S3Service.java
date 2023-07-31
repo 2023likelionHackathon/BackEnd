@@ -46,24 +46,27 @@ public class S3Service {
                 .build();
     }
 
-    public List<String> upload(List<MultipartFile> multipartFiles){
+    public List<String> uploadImages(List<MultipartFile> multipartFiles){
         List<String> imgUrlList = new ArrayList<>();
 
         for(MultipartFile file : multipartFiles){
-            String fileName = createFileName(file.getOriginalFilename());
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(file.getSize());
-            objectMetadata.setContentType(file.getContentType());
-
-            try(InputStream inputStream = file.getInputStream()){
-                s3Client.putObject(new PutObjectRequest(bucket+"/post/image", fileName, inputStream, objectMetadata)
-                        .withCannedAcl(CannedAccessControlList.PublicRead));
-                imgUrlList.add(s3Client.getUrl(bucket+"/post/image", fileName).toString());
-            } catch (IOException e) {
-                throw new ImageUploadException();
-            }
+            imgUrlList.add(uploadImage(file));
         }
         return imgUrlList;
+    }
+    public String uploadImage(MultipartFile file){
+        String fileName = createFileName(file.getOriginalFilename());
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(file.getSize());
+        objectMetadata.setContentType(file.getContentType());
+
+        try(InputStream inputStream = file.getInputStream()){
+            s3Client.putObject(new PutObjectRequest(bucket+"/post/image", fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            return s3Client.getUrl(bucket+"/post/image", fileName).toString();
+        } catch (IOException e) {
+            throw new ImageUploadException();
+        }
     }
     // 이미지파일명 중복 방지
     private String createFileName(String fileName) {
