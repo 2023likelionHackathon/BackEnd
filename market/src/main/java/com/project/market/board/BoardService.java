@@ -1,12 +1,12 @@
 package com.project.market.board;
 
+import com.project.market.board.dto.BoardDTO;
 import com.project.market.board.dto.ReplyDTO;
-import com.project.market.board.dto.request.BoardWrite;
-import com.project.market.board.dto.response.BoardResponse;
+import com.project.market.exception.ImageUploadException;
 import com.project.market.user.User;
 import com.project.market.user.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,34 +15,34 @@ import java.util.List;
 
 @Slf4j
 @Transactional
+@RequiredArgsConstructor
 @Service
 public class BoardService {
 
-    private BoardRepository boardRepository;
-    private UserRepository userRepository;
-    private BoardLikeRepository boardLikeRepository;
+    private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
+    private final BoardLikeRepository boardLikeRepository;
+    private final BoardImgRepository boardImgRepository;
 
-    @Autowired
-    public BoardService(BoardRepository boardRepository, UserRepository userRepository, BoardLikeRepository boardLikeRepository){
-        this.boardRepository = boardRepository;
-        this.userRepository = userRepository;
-        this.boardLikeRepository = boardLikeRepository;
-    }
-    public String register(BoardWrite boardWrite) {
+    public String post(BoardDTO.Request req, List<String> imgPaths) {
+        postBlankCheck(imgPaths);
         User user = userRepository.findById(2L)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
 
-        Board board = Board.builder()
-                .title(boardWrite.getTitle())
-                .content(boardWrite.getContent())
-                .user(user)
-                .writer(boardWrite.getWriter())
-                .picture(null)
-                .replyList(null)
-                .build();
-        boardRepository.save(board);
+        Board board = boardRepository.save(req.toEntity(user));
+        List<String> imgList = new ArrayList<>();
+        imgPaths.forEach(v->{
+            BoardImg img = new BoardImg(v, board);
+            boardImgRepository.save(img);
+            imgList.add(img.getImageUrl());
+        });
 
         return "SUCCESS";
+    }
+    private void postBlankCheck(List<String> imgPaths){
+        if(imgPaths == null || imgPaths.isEmpty()){
+            throw new ImageUploadException();
+        }
     }
 
 
@@ -53,39 +53,38 @@ public class BoardService {
         return "SUCCESS";
     }
 
-    public String update(Long id, BoardWrite boardWrite) {
+    public String update(Long id, BoardDTO.Request req) {
 
         Board new_board = Board.builder()
                 .id(id)
-                .title(boardWrite.getTitle())
-                .content(boardWrite.getContent())
+                .title(req.getTitle())
+                .content(req.getContent())
                 .build();
         boardRepository.save(new_board);
         return "SUCCESS";
     }
 
-    public BoardResponse select(Long id) {
-        Board board = boardRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 글입니다."));
+    public BoardDTO.Resposnse select(Long boardId) {
+        Board board = boardRepository.findBoardWithReply(boardId);
+        log.info("board", board.getTitle());
+        log.info("reply", board.getReplyList());
         List<ReplyDTO.Response> replylist = new ArrayList<>();
-        board.getReplyList().forEach(v->
-                replylist.add(new ReplyDTO.Response(v)));
-        BoardResponse boardResponse = BoardResponse.builder()
-                .boardId(board.getId())
-                .userId(board.getUser().getId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .writer(board.getWriter())
-                .likes(board.getLikes())
-                .createdDate(String.valueOf(board.getCreatedDate()))
-                .replyList(replylist)
-                .build();
-        return boardResponse;
+        if(board.getReplyList()!=null){
+            board.getReplyList().forEach(v->
+                    replylist.add(new ReplyDTO.Response(v)));
+        }
+
+        List<BoardImg> imgList = boardImgRepository.findAllByBoardId(boardId);
+        List<String> imgUrlList = new ArrayList<>();
+        imgList.forEach(v->{
+            imgUrlList.add(v.getImageUrl());
+        });
+        return board.toDTO(replylist, imgUrlList);
     }
 
-    public List<BoardResponse> selectAll() {
+    public List<BoardDTO.Resposnse> selectAll() {
         List<Board> boardList = boardRepository.findAll();
-        List<BoardResponse> result = new ArrayList<>();
+        List<BoardDTO.Resposnse> result = new ArrayList<>();
         boardList.forEach(v->{
             result.add(select(v.getId()));
         });

@@ -20,7 +20,7 @@ public class ReplyDTO {
             Reply reply = Reply.builder()
                     .user(user)
                     .board(board)
-                    .commentContent(comment)
+                    .reply(comment)
                     .build();
             return reply;
         }
@@ -45,7 +45,7 @@ public class ReplyDTO {
             this.boardId = reply.getBoard().getId();
             this.nickname = reply.getUser().getName();
             this.userId = reply.getUser().getId();
-            this.comment = reply.getCommentContent();
+            this.comment = reply.getReply();
             this.createdDate = reply.getCreatedDate().toString();
         }
     }

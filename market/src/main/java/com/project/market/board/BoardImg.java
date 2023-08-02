@@ -1,6 +1,5 @@
 package com.project.market.board;
 
-import com.project.market.domain.BaseTimeEntity;
 import com.project.market.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,28 +8,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Getter
 @Entity
-public class Reply extends BaseTimeEntity {
+public class BoardImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+    private String imageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user; // 작성자
-    @Column(name = "reply", nullable = false)
-    private String reply;
-    /* 댓글 수정 */
-    public void update(String comment) {
-        this.reply = comment;
+    public BoardImg(String imageUrl, Board board) {
+        this.imageUrl = imageUrl;
+        this.board = board;
     }
-
 }
