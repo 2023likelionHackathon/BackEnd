@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin(origins = "http://172.16.65.251:3000")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/board")
