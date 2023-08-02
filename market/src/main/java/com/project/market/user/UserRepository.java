@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "left join fetch u.boardList b " +
             "where u.id = :userId ")
     User findUserWithBoards(@Param("userId")Long userId);
+
+    Optional<User> findByUserId(String userId);
 }

@@ -32,10 +32,10 @@ public class UserDTO {
         private String nickname;
         private String role; // user, merchant
 
-        public User toEntity(String imgUrl, Role role) {
+        public User toEntity(String imgUrl, Role role, String pass) {
             return User.builder()
                     .userId(userId)
-                    .pw(pw)
+                    .pw(pass)
                     .email(email)
                     .name(name)
                     .nickname(nickname)
