@@ -23,8 +23,8 @@ public class MarketController {
     private final MarketService marketService;
     @GetMapping("/viewAll")
     public ResponseEntity viewAll(){
-        List<marketrespon> MarketList = marketService.selectAll();
-        return ResponseEntity.status(HttpStatus.OK).body(MarketList);
+        List<MarketResponse> marketList = marketService.selectAll();
+        return ResponseEntity.status(HttpStatus.OK).body(marketList);
     }
 
 }
