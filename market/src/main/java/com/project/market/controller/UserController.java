@@ -50,11 +50,20 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity profile(@AuthenticationPrincipal UserPrincipal loginUser) {
+    public ResponseEntity profileByLoginuser(@AuthenticationPrincipal UserPrincipal loginUser) {
         Map<String, Object> res = new HashMap<>();
         UserDTO.Profile user = userService.viewUser(loginUser.getId());
         res.put("user", user);
         List<BoardDTO.Response> boardList = boardService.selectByUser(loginUser.getId());
+        res.put("boardList", boardList);
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+    @GetMapping("/profile/{id}")
+    public ResponseEntity profile(@PathVariable("id") Long id) {
+        Map<String, Object> res = new HashMap<>();
+        UserDTO.Profile user = userService.viewUser(id);
+        res.put("user", user);
+        List<BoardDTO.Response> boardList = boardService.selectByUser(id);
         res.put("boardList", boardList);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }

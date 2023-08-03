@@ -61,10 +61,10 @@ public class BoardController {
     }
 
     @PostMapping("/like/{id}")
-    public ResponseEntity like(@PathVariable("id") Long id){
+    public ResponseEntity like(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){
         //SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
         //User user = userService.findUser(sessionUser);
-        String status = boardService.like(id);
+        String status = boardService.like(id, loginUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(status);
     }
 

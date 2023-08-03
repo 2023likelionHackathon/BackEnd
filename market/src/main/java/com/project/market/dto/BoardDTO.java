@@ -15,7 +15,6 @@ public class BoardDTO {
     @AllArgsConstructor
     @Builder
     public static class Request{
-        private Long userId;
         private String title;
         private String content;
         private Double score;

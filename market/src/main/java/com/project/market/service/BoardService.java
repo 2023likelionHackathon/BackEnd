@@ -97,10 +97,10 @@ public class BoardService {
         return result;
     }
 
-    public String like(Long id) {
+    public String like(Long id, Long userId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 게시글입니다."));
-        User user = userRepository.findById(2L)
+        User user = userRepository.findById(userId)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
         BoardLike boardLike = boardLikeRepository.findByBoardIdAndUserId(board.getId(), 2L);
         if(boardLike !=  null) {
