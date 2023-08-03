@@ -28,6 +28,8 @@ public class StoreDTO {
         private String intro;
         private String address;
         private String imgUrl;
+        private Double score;
         private List<MenuDTO> menuList;
+        private List<BoardDTO.Response> boareList;
     }
 }

@@ -1,16 +1,10 @@
 package com.project.market.service;
 
-import com.project.market.domain.Board;
-import com.project.market.domain.BoardImg;
-import com.project.market.domain.BoardLike;
+import com.project.market.domain.*;
 import com.project.market.dto.BoardDTO;
 import com.project.market.dto.ReplyDTO;
 import com.project.market.exception.ImageUploadException;
-import com.project.market.domain.User;
-import com.project.market.repository.BoardImgRepository;
-import com.project.market.repository.BoardLikeRepository;
-import com.project.market.repository.BoardRepository;
-import com.project.market.repository.UserRepository;
+import com.project.market.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,13 +23,15 @@ public class BoardService {
     private final UserRepository userRepository;
     private final BoardLikeRepository boardLikeRepository;
     private final BoardImgRepository boardImgRepository;
+    private final StoreRepository storeRepository;
 
     public String post(BoardDTO.Request req, List<String> imgPaths, Long userId) {
         postBlankCheck(imgPaths);
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
-
-        Board board = boardRepository.save(req.toEntity(user));
+        Store store = storeRepository.findById(req.getStore_id())
+                .orElseThrow(()-> new RuntimeException("존재하지 않는 점포입니다."));
+        Board board = boardRepository.save(req.toEntity(user, store));
         List<String> imgList = new ArrayList<>();
         imgPaths.forEach(v->{
             BoardImg img = new BoardImg(v, board);

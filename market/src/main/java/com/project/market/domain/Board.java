@@ -23,6 +23,11 @@ public class Board extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    private Store store;
+
     @Column(name = "title", nullable = false)
     private String title;
 
@@ -49,6 +54,9 @@ public class Board extends BaseTimeEntity {
         return BoardDTO.Response.builder()
                 .boardId(id)
                 .userId(user.getId())
+                .writer(user.getNickname())
+                .storeId(store.getId())
+                .storeName(store.getName())
                 .title(title)
                 .content(content)
                 .score(score)

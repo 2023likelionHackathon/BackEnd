@@ -35,6 +35,9 @@ public class Store {
     @OneToMany(mappedBy = "store")
     private List<Menu> menuList;
 
+    @OneToMany(mappedBy = "store")
+    private List<Board> boardList;
+
     public StoreDTO.Summary toSummaryDto() {
         return StoreDTO.Summary.builder()
                 .id(id)

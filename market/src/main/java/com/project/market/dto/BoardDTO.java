@@ -1,6 +1,7 @@
 package com.project.market.dto;
 
 import com.project.market.domain.Board;
+import com.project.market.domain.Store;
 import com.project.market.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,13 +16,15 @@ public class BoardDTO {
     @AllArgsConstructor
     @Builder
     public static class Request{
+        private Long store_id;
         private String title;
         private String content;
         private Double score;
 
-        public Board toEntity(User user) {
+        public Board toEntity(User user, Store store) {
             return Board.builder()
                     .user(user)
+                    .store(store)
                     .title(title)
                     .content(content)
                     .score(score).build();
@@ -34,6 +37,9 @@ public class BoardDTO {
     public static class Response {
         private Long boardId;
         private Long userId;
+        private String writer;
+        private Long storeId;
+        private String storeName;
         private String title;
         private String content;
         private Double score;
