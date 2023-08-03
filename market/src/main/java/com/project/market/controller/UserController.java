@@ -31,14 +31,8 @@ public class UserController {
     private final S3Service s3Service;
     @PostMapping("/join")
     public ResponseEntity register(@RequestPart("img") MultipartFile multipartFile,
-                                   @RequestPart("user") @Valid UserDTO.Request req, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            Map<String, String> errorMap = new HashMap<>();
-            for(FieldError error : bindingResult.getFieldErrors()){
-                errorMap.put("valid_"+error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
-        }
+                                   @RequestPart("user") @Valid UserDTO.Request req){
+
         log.info("controller req=>{}", req.getUserId());
         String imgUrl = null;
         if(multipartFile != null){

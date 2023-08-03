@@ -38,14 +38,7 @@ public class AuthenticationController {
     // 로그인
     @PostMapping
     public ResponseEntity authenticationUsernamePassword(@Valid @RequestBody AuthorizationDTO authorizationRequest, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response){
-        log.info("authentication username : ", authorizationRequest.getUsername());
-        if(bindingResult.hasErrors()){
-            Map<String, String> errorMap = new HashMap<>();
-            for(FieldError error : bindingResult.getFieldErrors()){
-                errorMap.put("valid_"+error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap);
-        }
+
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authorizationRequest.getUsername(), authorizationRequest.getPassword()));
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

@@ -4,6 +4,9 @@ import com.project.market.domain.*;
 import com.project.market.dto.BoardDTO;
 import com.project.market.dto.ReplyDTO;
 import com.project.market.exception.ImageUploadException;
+import com.project.market.exception.NonExistentBoardException;
+import com.project.market.exception.NonExistentStoreException;
+import com.project.market.exception.NonExistentUserException;
 import com.project.market.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,9 +31,9 @@ public class BoardService {
     public String post(BoardDTO.Request req, List<String> imgPaths, Long userId) {
         postBlankCheck(imgPaths);
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
+                .orElseThrow(()-> new NonExistentUserException());
         Store store = storeRepository.findById(req.getStore_id())
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 점포입니다."));
+                .orElseThrow(()-> new NonExistentStoreException());
         Board board = boardRepository.save(req.toEntity(user, store));
         List<String> imgList = new ArrayList<>();
         imgPaths.forEach(v->{
@@ -50,7 +53,7 @@ public class BoardService {
 
     public String delete(Long id) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 글입니다."));
+                .orElseThrow(() -> new NonExistentBoardException());
         boardRepository.delete(board);
         return "SUCCESS";
     }
@@ -67,7 +70,8 @@ public class BoardService {
     }
 
     public BoardDTO.Response select(Long boardId) {
-        Board board = boardRepository.findBoardWithReply(boardId);
+        Board board = boardRepository.findBoardWithReply(boardId)
+                .orElseThrow(()-> new NonExistentBoardException());
         List<ReplyDTO.Response> replylist = new ArrayList<>();
         if(board.getReplyList()!=null){
             board.getReplyList().forEach(v->
@@ -93,10 +97,10 @@ public class BoardService {
 
     public String like(Long id, Long userId) {
         Board board = boardRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 게시글입니다."));
+                .orElseThrow(()-> new NonExistentBoardException());
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
-        BoardLike boardLike = boardLikeRepository.findByBoardIdAndUserId(board.getId(), 2L);
+                .orElseThrow(()-> new NonExistentUserException());
+        BoardLike boardLike = boardLikeRepository.findByBoardIdAndUserId(board.getId(), user.getId());
         if(boardLike !=  null) {
             board.deletelike();
             boardLikeRepository.delete(boardLike);

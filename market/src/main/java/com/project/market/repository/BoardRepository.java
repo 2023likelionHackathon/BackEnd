@@ -7,13 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select distinct b from Board b " +
             "left join fetch b.replyList r " +
             "where b.id = :boardId")
-    Board findBoardWithReply(@Param("boardId")Long boardId);
+    Optional<Board> findBoardWithReply(@Param("boardId")Long boardId);
 
     List<Board> findByUserId(Long userId);
 

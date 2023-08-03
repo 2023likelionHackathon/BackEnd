@@ -2,6 +2,8 @@ package com.project.market.service;
 
 import com.project.market.domain.Market;
 import com.project.market.dto.MarketDTO;
+import com.project.market.exception.NonExistentMarketException;
+import com.project.market.exception.NonExistentRegionException;
 import com.project.market.repository.MarketRepository;
 import com.project.market.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class MarketService {
 
     public List<MarketDTO.Summary> viewAllByRegion(Long regionId) {
         List<Market> marketList = marketRepository.findAllByRegion(
-                regionRepository.findById(regionId).orElseThrow(()->new RuntimeException("해당 지역에 대한 데이터는 존재하지 않습니다.")));
+                regionRepository.findById(regionId).orElseThrow(()->new NonExistentRegionException()));
         List<MarketDTO.Summary> res = new ArrayList<>();
         marketList.forEach(v->{
             res.add(v.toSummaryDto());
@@ -30,7 +32,7 @@ public class MarketService {
 
     public MarketDTO.Detail viewMarket(Long marketId) {
         Market market = marketRepository.findMarketWithStores(marketId)
-                .orElseThrow(()-> new RuntimeException("해당 시장이 존재하지 않습니다."));
+                .orElseThrow(()-> new NonExistentMarketException());
         return market.toDetailDto();
     }
 }

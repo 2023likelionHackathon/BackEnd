@@ -2,6 +2,7 @@ package com.project.market.service;
 
 import com.project.market.domain.Store;
 import com.project.market.dto.StoreDTO;
+import com.project.market.exception.NonExistentStoreException;
 import com.project.market.repository.BoardRepository;
 import com.project.market.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class StoreService {
 
     public StoreDTO.Detail viewStore(Long shopId) {
         Store store = storeRepository.findByShopId(shopId)
-                .orElseThrow(()-> new RuntimeException("해당 점포가 존재하지 않습니다."));
+                .orElseThrow(()-> new NonExistentStoreException());
         Double avg = boardRepository.findAvg(shopId);
         return store.toDetailDto(avg);
     }

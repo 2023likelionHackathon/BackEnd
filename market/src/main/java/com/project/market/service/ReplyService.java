@@ -3,6 +3,8 @@ package com.project.market.service;
 import com.project.market.domain.Board;
 import com.project.market.domain.Reply;
 import com.project.market.dto.ReplyDTO;
+import com.project.market.exception.NonExistentBoardException;
+import com.project.market.exception.NonExistentUserException;
 import com.project.market.repository.BoardRepository;
 import com.project.market.repository.board.ReplyRepository;
 import com.project.market.domain.User;
@@ -22,9 +24,9 @@ public class ReplyService {
 
     public String post(ReplyDTO.Request request, Long userId) {
         Board board = boardRepository.findById(request.getBoardId())
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 게시글입니다."));
+                .orElseThrow(()-> new NonExistentBoardException());
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
+                .orElseThrow(()-> new NonExistentUserException());
         Reply reply = request.toEntity(user, board);
         replyRepository.save(reply);
         return "SUCCESS";
@@ -32,7 +34,7 @@ public class ReplyService {
 
     public String delete(Long id) {
         Reply reply = replyRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("존재하지 않는 게시글입니다."));
+                .orElseThrow(()->new NonExistentBoardException());
         replyRepository.delete(reply);
         return "SUCCESS";
     }
