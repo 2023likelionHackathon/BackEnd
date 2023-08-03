@@ -2,49 +2,33 @@ package com.project.market.market;
 import javax.persistence.*;
 import lombok.*;
 import java.io.Serializable;
+import java.util.List;
+
 @Entity
-@Table(name = "store")
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(Store.StoreId.class)
+@Builder
 public class Store {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Id
     @ManyToOne
-    @JoinColumn(name = "mk_id")
+    @JoinColumn(name = "market_id")
     private Market market;
 
-    @Column(name = "st_name")
-    private String st_name;
+    private String name;
 
-    @Column(name = "st_intro")
-    private String st_intro;
+    private String intro;
 
-    @Column(name = "st_address")
-    private String st_address;
+    private String address;
 
-    @Column(name = "st_num")
-    private String st_num;
+    private String num;
 
-    @Column(name = "st_time")
-    private String st_time;
+    private String time;
+    private String imgUrl;
+    @OneToMany(mappedBy = "store")
+    private List<Menu> menuList;
 
-    @Column(name = "code")
-    private String code;
-
-
-
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class StoreId implements Serializable {
-
-        private int id;
-        private int mkId;
-
-
-    }
 }
