@@ -18,4 +18,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByUserId(Long userId);
 
     List<Board> findByStoreId(Long storeId);
+
+    @Query(" select avg(b.score) from Board b " +
+            "where b.store.id =:storeId")
+    Double findAvg(Long storeId);
 }
