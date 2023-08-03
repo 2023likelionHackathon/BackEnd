@@ -16,4 +16,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Board findBoardWithReply(@Param("boardId")Long boardId);
 
     List<Board> findByUserId(Long userId);
+
+    List<Board> findByStoreId(Long storeId);
 }

@@ -123,4 +123,13 @@ public class BoardService {
         });
         return res;
     }
+
+    public List<BoardDTO.Response> selectByStore(Long storeId) {
+        List<Board> boardList = boardRepository.findByStoreId(storeId);
+        List<BoardDTO.Response> res = new ArrayList<>();
+        boardList.forEach(v->{
+            res.add(select(v.getId()));
+        });
+        return res;
+    }
 }

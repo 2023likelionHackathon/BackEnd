@@ -30,6 +30,5 @@ public class StoreDTO {
         private String imgUrl;
         private Double score;
         private List<MenuDTO> menuList;
-        private List<BoardDTO.Response> boareList;
     }
 }
