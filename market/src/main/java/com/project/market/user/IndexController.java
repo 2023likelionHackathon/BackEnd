@@ -1,6 +1,6 @@
 package com.project.market.user;
 
-import com.project.market.user.config.oauth.dto.SessionUser;
+import com.project.market.config.oauth.dto.SessionUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
