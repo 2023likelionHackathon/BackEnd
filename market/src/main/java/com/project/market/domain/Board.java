@@ -44,9 +44,9 @@ public class Board extends BaseTimeEntity {
         this.likes += 1;
     }
 
-    public BoardDTO.Resposnse toDTO(List<ReplyDTO.Response> replylist, List<String> imgList) {
+    public BoardDTO.Response toDTO(List<ReplyDTO.Response> replylist, List<String> imgList) {
         log.info("createdDate = ", getCreatedDate().toString());
-        return BoardDTO.Resposnse.builder()
+        return BoardDTO.Response.builder()
                 .boardId(id)
                 .userId(user.getId())
                 .title(title)

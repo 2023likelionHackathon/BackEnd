@@ -23,10 +23,10 @@ public class UserService {
 //        return user;
 //    }
 
-    public UserDTO.Response viewUser(Long userId) {
+    public UserDTO.Profile viewUser(Long userId) {
         User user = userRepository.findUserWithBoards(userId);
 
-        return user.toDTO();
+        return user.toProfileDto();
     }
 
     public String register(UserDTO.Request req, String imgUrl) {

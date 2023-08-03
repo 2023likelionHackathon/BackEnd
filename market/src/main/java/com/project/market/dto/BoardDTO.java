@@ -32,7 +32,7 @@ public class BoardDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Resposnse{
+    public static class Response {
         private Long boardId;
         private Long userId;
         private String title;

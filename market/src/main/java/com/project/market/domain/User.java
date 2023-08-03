@@ -1,5 +1,6 @@
 package com.project.market.domain;
 
+import com.project.market.dto.BoardDTO;
 import com.project.market.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,8 +58,8 @@ public class User extends BaseTimeEntity {
         return this.role.getKey();
     }
 
-    public UserDTO.Response toDTO() {
-        return UserDTO.Response.builder()
+    public UserDTO.Profile toProfileDto() {
+        return UserDTO.Profile.builder()
                 .id(id)
                 .userId(userId)
                 .nickname(nickname)

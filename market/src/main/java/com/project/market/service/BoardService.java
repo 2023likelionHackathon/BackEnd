@@ -30,9 +30,9 @@ public class BoardService {
     private final BoardLikeRepository boardLikeRepository;
     private final BoardImgRepository boardImgRepository;
 
-    public String post(BoardDTO.Request req, List<String> imgPaths) {
+    public String post(BoardDTO.Request req, List<String> imgPaths, Long userId) {
         postBlankCheck(imgPaths);
-        User user = userRepository.findById(2L)
+        User user = userRepository.findById(userId)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
 
         Board board = boardRepository.save(req.toEntity(user));
@@ -70,7 +70,7 @@ public class BoardService {
         return "SUCCESS";
     }
 
-    public BoardDTO.Resposnse select(Long boardId) {
+    public BoardDTO.Response select(Long boardId) {
         Board board = boardRepository.findBoardWithReply(boardId);
         log.info("board", board.getTitle());
         log.info("reply", board.getReplyList());
@@ -88,9 +88,9 @@ public class BoardService {
         return board.toDTO(replylist, imgUrlList);
     }
 
-    public List<BoardDTO.Resposnse> selectAll() {
+    public List<BoardDTO.Response> selectAll() {
         List<Board> boardList = boardRepository.findAll();
-        List<BoardDTO.Resposnse> result = new ArrayList<>();
+        List<BoardDTO.Response> result = new ArrayList<>();
         boardList.forEach(v->{
             result.add(select(v.getId()));
         });
@@ -117,5 +117,14 @@ public class BoardService {
         }
 
         return "SUCCESS";
+    }
+
+    public List<BoardDTO.Response> selectByUser(Long userId) {
+        List<Board> boardList = boardRepository.findByUserId(userId);
+        List<BoardDTO.Response> res = new ArrayList<>();
+        boardList.forEach(v->{
+            res.add(select(v.getId()));
+        });
+        return res;
     }
 }
