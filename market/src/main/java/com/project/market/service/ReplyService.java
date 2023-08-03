@@ -20,10 +20,10 @@ public class ReplyService {
     private BoardRepository boardRepository;
     private UserRepository userRepository;
 
-    public String post(ReplyDTO.Request request) {
+    public String post(ReplyDTO.Request request, Long userId) {
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 게시글입니다."));
-        User user = userRepository.findById(request.getUserId())
+        User user = userRepository.findById(userId)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 사용자입니다."));
         Reply reply = request.toEntity(user, board);
         replyRepository.save(reply);

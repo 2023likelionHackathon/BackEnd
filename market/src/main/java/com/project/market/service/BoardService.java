@@ -68,8 +68,6 @@ public class BoardService {
 
     public BoardDTO.Response select(Long boardId) {
         Board board = boardRepository.findBoardWithReply(boardId);
-        log.info("board", board.getTitle());
-        log.info("reply", board.getReplyList());
         List<ReplyDTO.Response> replylist = new ArrayList<>();
         if(board.getReplyList()!=null){
             board.getReplyList().forEach(v->

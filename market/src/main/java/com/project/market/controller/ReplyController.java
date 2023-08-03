@@ -1,11 +1,13 @@
 package com.project.market.controller;
 
 import com.project.market.dto.ReplyDTO;
+import com.project.market.security.UserPrincipal;
 import com.project.market.service.ReplyService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -16,10 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class ReplyController {
     private ReplyService replyService;
     @PostMapping("/post")
-    public ResponseEntity post(@RequestBody ReplyDTO.Request request){
-        //SessionUser sessionUser = (SessionUser) httpSession.getAttribute("user");
-        //User user = userService.findUser(sessionUser);
-        String status = replyService.post(request);
+    public ResponseEntity post(@RequestBody ReplyDTO.Request request, @AuthenticationPrincipal UserPrincipal loginUser){
+
+        String status = replyService.post(request, loginUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(status);
     }
 

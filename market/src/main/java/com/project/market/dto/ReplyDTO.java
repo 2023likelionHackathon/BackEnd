@@ -12,7 +12,6 @@ public class ReplyDTO {
     @NoArgsConstructor
     @Builder
     public static class Request {
-        private Long userId;
         private Long boardId;
         private String comment;
         /* Dto -> Entity */
@@ -34,17 +33,17 @@ public class ReplyDTO {
     @Getter
     public static class Response {
         private Long replyId;
+        private Long userId;
+        private String writer;
+        private String role;
         private String comment;
         private String createdDate;
-        private String nickname;
-        private Long userId;
-        private Long boardId;
         /* Entity -> Dto*/
         public Response(Reply reply) {
             this.replyId = reply.getId();
-            this.boardId = reply.getBoard().getId();
-            this.nickname = reply.getUser().getName();
             this.userId = reply.getUser().getId();
+            this.writer = reply.getUser().getNickname();
+            this.role = reply.getUser().getRole().getTitle();
             this.comment = reply.getReply();
             this.createdDate = reply.getCreatedDate().toString();
         }
