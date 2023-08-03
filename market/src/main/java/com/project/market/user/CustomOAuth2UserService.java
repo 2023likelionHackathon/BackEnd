@@ -1,7 +1,9 @@
 package com.project.market.user;
 
-import com.project.market.user.config.oauth.dto.OAuthAttributes;
-import com.project.market.user.config.oauth.dto.SessionUser;
+import com.project.market.config.oauth.dto.OAuthAttributes;
+import com.project.market.config.oauth.dto.SessionUser;
+import com.project.market.domain.User;
+import com.project.market.repository.UserRepository;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

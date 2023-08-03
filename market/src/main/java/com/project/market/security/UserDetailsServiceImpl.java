@@ -1,7 +1,7 @@
 package com.project.market.security;
 
-import com.project.market.user.User;
-import com.project.market.user.UserRepository;
+import com.project.market.domain.User;
+import com.project.market.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
