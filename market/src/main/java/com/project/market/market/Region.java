@@ -1,19 +1,29 @@
 package com.project.market.market;
+import com.project.market.market.dto.RegionDTO;
 import lombok.*;
 
 import javax.persistence.*;
-@Getter @Setter
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Getter
 @Entity
-@Table(name = "region")
 public class Region {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+    private Long id;
 
-    @Column(name = "rg_name")
-    private String rg_name;
+    private String name;
+
+    @OneToMany(mappedBy = "region")
+    private List<Market> marketList;
+
+    public RegionDTO toDTO() {
+        return RegionDTO.builder()
+                .id(id)
+                .name(name).build();
+    }
 }

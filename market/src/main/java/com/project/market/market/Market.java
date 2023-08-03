@@ -1,34 +1,49 @@
 package com.project.market.market;
-import javax.persistence.*;
+import com.project.market.market.dto.MarketDTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.List;
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "market")
+@Getter
 public class Market {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rg_id", nullable = false)
-    private int rg_Id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
 
-    @Column(name = "mk_name")
-    private String mk_name;
+    private String name;
 
-    @Column(name = "mk_intro")
-    private String mk_intro;
+    private String intro;
 
-    @Column(name = "mk_address")
-    private String mk_address;
+    private String address;
 
-    @Column(name = "mk_num")
-    private String mk_num;
+    private String num;
 
-    @Column(name = "mk_close")
-    private String mk_close;
+    private String close;
 
-    @Column(name = "mk_parking")
-    private String mk_parking;
+    private String parking;
 
+    private String imgUrl;
 
+    @OneToMany(mappedBy = "market")
+    private List<Store> storeList;
+
+    public MarketDTO.Main toDTO() {
+        return MarketDTO.Main.builder()
+                .id(id)
+                .name(name)
+                .intro(intro)
+                .address(address).build();
+    }
 }
