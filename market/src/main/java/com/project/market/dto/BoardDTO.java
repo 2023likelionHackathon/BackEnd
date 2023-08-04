@@ -50,4 +50,5 @@ public class BoardDTO {
         private String createdDate;
 
     }
+
 }

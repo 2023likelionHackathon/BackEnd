@@ -1,5 +1,6 @@
 package com.project.market.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.market.dto.BoardDTO;
 import com.project.market.dto.UserDTO;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name="role", nullable = false)
     private Role role;
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // board 정렬
     private List<Board> boardList;

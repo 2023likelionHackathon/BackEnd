@@ -25,10 +25,10 @@ public class StoreController {
     @GetMapping("/view/{id}")
     public ResponseEntity viewStore(@PathVariable("id") Long id){
         Map<String, Object> res = new HashMap<>();
-        StoreDTO.Detail store = storeService.viewStore(id);
+        Map<String, Object> map = boardService.selectByStore(id);
+        res.put("boardList", map.get("boardList"));
+        StoreDTO.Detail store = storeService.viewStore(id, (Double)map.get("store_avg"));
         res.put("store", store);
-        List<BoardDTO.Response> boardList = boardService.selectByStore(id);
-        res.put("boardList", boardList);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 }

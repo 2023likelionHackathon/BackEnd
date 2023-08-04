@@ -16,10 +16,10 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final BoardRepository boardRepository;
 
-    public StoreDTO.Detail viewStore(Long shopId) {
+    public StoreDTO.Detail viewStore(Long shopId, Double avg) {
         Store store = storeRepository.findByShopId(shopId)
                 .orElseThrow(()-> new NonExistentStoreException());
-        Double avg = boardRepository.findAvg(shopId);
+        // Double avg = boardRepository.findAvg(shopId);
         return store.toDetailDto(avg);
     }
 }

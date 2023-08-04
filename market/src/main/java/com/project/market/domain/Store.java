@@ -1,6 +1,7 @@
 package com.project.market.domain;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.market.dto.MenuDTO;
 import com.project.market.dto.StoreDTO;
 import lombok.*;
@@ -19,7 +20,7 @@ public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "market_id")
     private Market market;
 
@@ -33,10 +34,11 @@ public class Store {
 
     private String time;
     private String imgUrl;
+    @JsonIgnore
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "store")
     private List<Menu> menuList;
-
+    @JsonIgnore
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "store")
     private List<Board> boardList;

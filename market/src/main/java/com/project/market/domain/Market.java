@@ -1,4 +1,5 @@
 package com.project.market.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.market.dto.MarketDTO;
 import com.project.market.dto.StoreDTO;
 import lombok.AllArgsConstructor;
@@ -37,7 +38,7 @@ public class Market {
     private String parking;
 
     private String imgUrl;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "market")
     private List<Store> storeList;
 

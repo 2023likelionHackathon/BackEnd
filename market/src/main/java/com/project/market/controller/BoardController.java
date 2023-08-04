@@ -1,7 +1,9 @@
 package com.project.market.controller;
 
+import com.project.market.domain.Board;
 import com.project.market.dto.BoardDTO;
 import com.project.market.exception.ImageUploadException;
+import com.project.market.repository.BoardRepository;
 import com.project.market.security.UserPrincipal;
 import com.project.market.service.BoardService;
 import com.project.market.s3.S3Service;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +28,17 @@ public class BoardController {
     private final BoardService boardService;
 
     private final S3Service s3Service;
-    private final HttpSession httpSession;
+
+    @GetMapping("test")
+    public ResponseEntity test(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("user", "김채원");
+        map.put("postImage","https://s3.ap-northeast-2.amazonaws.com/markeybucket/post/image/b118de25-bb26-413f-96af-1ab70afa2cb1.jpg");
+        map.put("likes",3);
+        map.put("timeStamp","2023-07-30T19:03:19.456967");
+        map.put("chats", 3);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
     @PostMapping("/post")
     public ResponseEntity post(@RequestPart("board") BoardDTO.Request req,
                                @RequestPart("imgUrl")List<MultipartFile> multipartFiles,
@@ -46,6 +60,7 @@ public class BoardController {
     @GetMapping("/view/{id}")
     public ResponseEntity view(@PathVariable("id") Long id){
         BoardDTO.Response boardResponse = boardService.select(id);
+
         return ResponseEntity.status(HttpStatus.OK).body(boardResponse);
     }
     @DeleteMapping("/delete/{id}")

@@ -2,6 +2,7 @@ package com.project.market.service;
 
 import com.project.market.domain.*;
 import com.project.market.dto.BoardDTO;
+import com.project.market.dto.BoardWithAvg;
 import com.project.market.dto.ReplyDTO;
 import com.project.market.exception.ImageUploadException;
 import com.project.market.exception.NonExistentBoardException;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Transactional
@@ -70,29 +73,34 @@ public class BoardService {
     }
 
     public BoardDTO.Response select(Long boardId) {
-        Board board = boardRepository.findBoardWithReply(boardId)
+//        Board board = boardRepository.findBoardWithReply(boardId)
+//                .orElseThrow(()-> new NonExistentBoardException());
+        Board board = boardRepository.findById(boardId)
                 .orElseThrow(()-> new NonExistentBoardException());
-        List<ReplyDTO.Response> replylist = new ArrayList<>();
-        if(board.getReplyList()!=null){
-            board.getReplyList().forEach(v->
-                    replylist.add(new ReplyDTO.Response(v)));
-        }
-
-        List<BoardImg> imgList = boardImgRepository.findAllByBoardId(boardId);
-        List<String> imgUrlList = new ArrayList<>();
-        imgList.forEach(v->{
-            imgUrlList.add(v.getImageUrl());
-        });
-        return board.toDTO(replylist, imgUrlList);
+        return makeDTO(board);
     }
 
     public List<BoardDTO.Response> selectAll() {
         List<Board> boardList = boardRepository.findAll();
         List<BoardDTO.Response> result = new ArrayList<>();
         boardList.forEach(v->{
-            result.add(select(v.getId()));
+            result.add(makeDTO(v));
         });
         return result;
+    }
+    public BoardDTO.Response makeDTO(Board board){
+        List<ReplyDTO.Response> replylist = new ArrayList<>();
+        if(board.getReplyList()!=null){
+            board.getReplyList().forEach(v->
+                    replylist.add(new ReplyDTO.Response(v)));
+        }
+
+        //List<BoardImg> imgList = boardImgRepository.findAllByBoardId(boardId);
+        List<String> imgUrlList = new ArrayList<>();
+        board.getBoardImgList().forEach(v->{
+            imgUrlList.add(v.getImageUrl());
+        });
+        return board.toDTO(replylist, imgUrlList);
     }
 
     public String like(Long id, Long userId) {
@@ -121,17 +129,24 @@ public class BoardService {
         List<Board> boardList = boardRepository.findByUserId(userId);
         List<BoardDTO.Response> res = new ArrayList<>();
         boardList.forEach(v->{
-            res.add(select(v.getId()));
+            res.add(makeDTO(v));
         });
         return res;
     }
 
-    public List<BoardDTO.Response> selectByStore(Long storeId) {
-        List<Board> boardList = boardRepository.findByStoreId(storeId);
-        List<BoardDTO.Response> res = new ArrayList<>();
+    public Map<String, Object> selectByStore(Long storeId) {
+        Map<String, Object> map = new HashMap<>();
+        List<BoardWithAvg> boardList = boardRepository.findBoardWithAvgByStoreId(storeId);
+        log.info("board userid = {}", boardList.get(0).getBoard().getUser().getUserId());
+        log.info("board reply = {}", boardList.get(0).getBoard().getReplyList().stream().count());
+        log.info("board img = {}", boardList.get(0).getBoard().getBoardImgList().stream().count());
+        List<BoardDTO.Response> board_res = new ArrayList<>();
         boardList.forEach(v->{
-            res.add(select(v.getId()));
+            board_res.add(makeDTO(v.getBoard()));
         });
-        return res;
+        map.put("boardList", board_res);
+        Double storeAvg = boardList.get(0).getScoreAvg();
+        map.put("store_avg", storeAvg);
+        return map;
     }
 }

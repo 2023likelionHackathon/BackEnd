@@ -1,5 +1,6 @@
 package com.project.market.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.market.dto.BoardDTO;
 import com.project.market.dto.ReplyDTO;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,9 +37,13 @@ public class Board extends BaseTimeEntity {
     private String content;
     private Double score;
     private int likes;
+    @BatchSize(size = 1000)
+    @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardImg> boardImgList;
 
+    @BatchSize(size = 1000)
+    @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
     private List<Reply> replyList;
@@ -50,7 +56,6 @@ public class Board extends BaseTimeEntity {
     }
 
     public BoardDTO.Response toDTO(List<ReplyDTO.Response> replylist, List<String> imgList) {
-        log.info("createdDate = ", getCreatedDate().toString());
         return BoardDTO.Response.builder()
                 .boardId(id)
                 .userId(user.getId())
