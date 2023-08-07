@@ -11,6 +11,7 @@ import com.project.market.exception.NonExistentUserException;
 import com.project.market.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,7 +82,8 @@ public class BoardService {
     }
 
     public List<BoardDTO.Response> selectAll() {
-        List<Board> boardList = boardRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.DESC, "id","createdDate");
+        List<Board> boardList = boardRepository.findAll(sort);
         List<BoardDTO.Response> result = new ArrayList<>();
         boardList.forEach(v->{
             result.add(select(v.getId()));
