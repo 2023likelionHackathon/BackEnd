@@ -1,8 +1,11 @@
 package com.project.market.service;
 
+import com.project.market.domain.Store;
 import com.project.market.dto.UserDTO;
 import com.project.market.exception.AlreadyExistsException;
+import com.project.market.exception.NonExistentStoreException;
 import com.project.market.exception.NonExistentUserException;
+import com.project.market.repository.StoreRepository;
 import com.project.market.repository.UserRepository;
 import com.project.market.domain.Role;
 import com.project.market.domain.User;
@@ -20,6 +23,7 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final StoreRepository storeRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserDTO.Profile viewUser(Long userId) {
@@ -39,7 +43,10 @@ public class UserService {
         if(req.getRole().equals("USER")){
             userRepository.save(req.toEntity(imgUrl, Role.USER, pass));
         }else if(req.getRole().equals("MERCHANT")){
-            userRepository.save(req.toEntity(imgUrl, Role.MERCHANT, pass));
+            User user = userRepository.save(req.toEntity(imgUrl, Role.MERCHANT, pass));
+            Store store = storeRepository.findByCode(req.getCode())
+                    .orElseThrow(()-> new NonExistentStoreException());
+            storeRepository.save(store.setMerchant(user));
         }
         return "SUCCESS";
     }

@@ -24,6 +24,10 @@ public class Store {
     @JoinColumn(name = "market_id")
     private Market market;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "merchant_id")
+    private User user;
+
     private String name;
 
     private String intro;
@@ -34,6 +38,7 @@ public class Store {
 
     private String time;
     private String imgUrl;
+    private String code;
     @JsonIgnore
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "store")
@@ -42,6 +47,11 @@ public class Store {
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "store")
     private List<Board> boardList;
+
+    public Store setMerchant(User user){
+        this.user = user;
+        return this;
+    }
 
     public StoreDTO.Summary toSummaryDto() {
         return StoreDTO.Summary.builder()

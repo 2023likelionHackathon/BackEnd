@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -21,5 +24,14 @@ public class StoreService {
                 .orElseThrow(()-> new NonExistentStoreException());
         // Double avg = boardRepository.findAvg(shopId);
         return store.toDetailDto(avg);
+    }
+
+    public List<StoreDTO.Select> viewStoreList() {
+        List<Store> storeList = storeRepository.findAll();
+        List<StoreDTO.Select> res = new ArrayList<>();
+        storeList.forEach(v->{
+            res.add(new StoreDTO.Select(v));
+        });
+        return res;
     }
 }

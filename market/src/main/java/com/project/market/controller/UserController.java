@@ -32,8 +32,6 @@ public class UserController {
     @PostMapping("/join")
     public ResponseEntity register(@RequestPart("img") MultipartFile multipartFile,
                                    @RequestPart("user") @Valid UserDTO.Request req){
-
-        log.info("controller req=>{}", req.getUserId());
         String imgUrl = null;
         if(multipartFile != null){
             imgUrl = s3Service.uploadImage(multipartFile);

@@ -29,6 +29,7 @@ public class UserDTO {
         private String name;
         private String nickname;
         private String role; // user, merchant
+        private String code;
 
         public User toEntity(String imgUrl, Role role, String pass) {
             return User.builder()
@@ -41,6 +42,7 @@ public class UserDTO {
                     .role(role).build();
         }
     }
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

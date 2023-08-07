@@ -26,6 +26,8 @@ public class Reply extends BaseTimeEntity {
     private User user; // 작성자
     @Column(name = "reply", nullable = false)
     private String reply;
+
+    private String role;
     /* 댓글 수정 */
     public void update(String comment) {
         this.reply = comment;

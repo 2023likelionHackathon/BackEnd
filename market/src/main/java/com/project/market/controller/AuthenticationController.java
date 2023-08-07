@@ -43,6 +43,7 @@ public class AuthenticationController {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authorizationRequest.getUsername(), authorizationRequest.getPassword()));
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
             String status = generateTokenCookie(userPrincipal, request, response);
+            log.info("loginUser => {}", userPrincipal.getId());
             return ResponseEntity.status(HttpStatus.OK).body(status);
         } catch (AuthenticationException e) {
             throw new AuthenticationFailedException("아이디 또는 패스워드가 틀렸습니다.");

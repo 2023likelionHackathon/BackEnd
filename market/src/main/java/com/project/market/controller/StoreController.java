@@ -31,4 +31,10 @@ public class StoreController {
         res.put("store", store);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
+
+    @GetMapping("/viewList")
+    public ResponseEntity viewStoreList(){
+        List<StoreDTO.Select> res = storeService.viewStoreList();
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
 }

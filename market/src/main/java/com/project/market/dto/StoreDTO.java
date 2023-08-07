@@ -1,13 +1,24 @@
 package com.project.market.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.project.market.domain.Store;
+import lombok.*;
 
 import java.util.List;
 
 public class StoreDTO {
+    @RequiredArgsConstructor
+    @Data
+    public static class Select{
+        private Long id;
+        private String name;
+        private String market;
+
+        public Select(Store store){
+            this.id = store.getId();
+            this.name = store.getName();
+            this.market = store.getMarket().getName();
+        }
+    }
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

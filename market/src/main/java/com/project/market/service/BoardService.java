@@ -75,7 +75,7 @@ public class BoardService {
     public BoardDTO.Response select(Long boardId) {
 //        Board board = boardRepository.findBoardWithReply(boardId)
 //                .orElseThrow(()-> new NonExistentBoardException());
-        Board board = boardRepository.findById(boardId)
+        Board board = boardRepository.findBoardById(boardId)
                 .orElseThrow(()-> new NonExistentBoardException());
         return makeDTO(board);
     }
@@ -84,7 +84,7 @@ public class BoardService {
         List<Board> boardList = boardRepository.findAll();
         List<BoardDTO.Response> result = new ArrayList<>();
         boardList.forEach(v->{
-            result.add(makeDTO(v));
+            result.add(select(v.getId()));
         });
         return result;
     }
@@ -103,7 +103,7 @@ public class BoardService {
         return board.toDTO(replylist, imgUrlList);
     }
 
-    public String like(Long id, Long userId) {
+    public Integer like(Long id, Long userId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(()-> new NonExistentBoardException());
         User user = userRepository.findById(userId)
@@ -122,7 +122,7 @@ public class BoardService {
             board.addlike();
         }
 
-        return "SUCCESS";
+        return board.getLikes();
     }
 
     public List<BoardDTO.Response> selectByUser(Long userId) {

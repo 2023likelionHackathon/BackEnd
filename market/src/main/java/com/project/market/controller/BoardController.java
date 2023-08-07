@@ -77,9 +77,12 @@ public class BoardController {
 
     @PostMapping("/like/{id}")
     public ResponseEntity like(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){
-
-        String status = boardService.like(id, loginUser.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(status);
+        Map<String, Integer> map = new HashMap<>();
+        // int(자료형, primitive type) => 산술연산 가능, null로 초기화 불가
+        // Integer(래퍼 클래스, Wrapper class) => unboxing하지 않을 시 산술연산 불가능, null로 초기화 가능
+        Integer likes = boardService.like(id, loginUser.getId());
+        map.put("likes", likes);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
 

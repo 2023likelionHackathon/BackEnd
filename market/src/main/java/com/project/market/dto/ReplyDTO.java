@@ -15,11 +15,12 @@ public class ReplyDTO {
         private Long boardId;
         private String comment;
         /* Dto -> Entity */
-        public Reply toEntity(User user, Board board) {
+        public Reply toEntity(User user, Board board, String role) {
             Reply reply = Reply.builder()
                     .user(user)
                     .board(board)
                     .reply(comment)
+                    .role(role)
                     .build();
             return reply;
         }
@@ -43,7 +44,7 @@ public class ReplyDTO {
             this.replyId = reply.getId();
             this.userId = reply.getUser().getId();
             this.writer = reply.getUser().getNickname();
-            this.role = reply.getUser().getRole().getTitle();
+            this.role = reply.getRole();
             this.comment = reply.getReply();
             this.createdDate = reply.getCreatedDate().toString();
         }

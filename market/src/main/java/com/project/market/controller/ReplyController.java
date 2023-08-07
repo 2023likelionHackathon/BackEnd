@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @CrossOrigin(origins = "http://172.16.65.251:3000")
 @AllArgsConstructor
@@ -19,15 +21,15 @@ public class ReplyController {
     private ReplyService replyService;
     @PostMapping("/post")
     public ResponseEntity post(@RequestBody ReplyDTO.Request request, @AuthenticationPrincipal UserPrincipal loginUser){
-
-        String status = replyService.post(request, loginUser.getId());
-        return ResponseEntity.status(HttpStatus.OK).body(status);
+        log.info("loginUser id = {}", loginUser.getId());
+        List<ReplyDTO.Response> replyList = replyService.post(request, loginUser.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(replyList);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable("id") Long id){
-        String status = replyService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).body(status);
+    public ResponseEntity delete(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){
+        List<ReplyDTO.Response> replyList = replyService.delete(id, loginUser.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(replyList);
     }
 
 }
