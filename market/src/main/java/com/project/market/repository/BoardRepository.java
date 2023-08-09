@@ -28,6 +28,11 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "left join fetch b.user u " +
             "where u.id = :userId ")
     List<Board> findByUserId(Long userId);
+    @Query("select b from Board b " +
+            "left join fetch b.store s " +
+            "left join fetch s.user u " +
+            "where b.id = :boardId ")
+    Optional<Board> findBoardWithStore(Long boardId);
 
     @Query(" select new com.project.market.dto.BoardWithAvg(b, avg(b.score)) " +
             "from Board b " +

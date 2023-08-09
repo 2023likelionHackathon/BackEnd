@@ -5,6 +5,9 @@ import com.project.market.domain.Reply;
 import com.project.market.domain.User;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReplyDTO {
     /** 댓글 Service 요청을 위한 DTO 클래스 */
     @Data
@@ -13,6 +16,7 @@ public class ReplyDTO {
     @Builder
     public static class Request {
         private Long boardId;
+        private Long parentId;
         private String comment;
         /* Dto -> Entity */
         public Reply toEntity(User user, Board board, String role) {
@@ -30,14 +34,14 @@ public class ReplyDTO {
      * Entity 클래스를 생성자 파라미터로 받아 데이터를 Dto로 변환하여 응답
      * 별도의 전달 객체를 활용해 연관관계를 맺은 엔티티간의 무한참조를 방지
      */
-    @RequiredArgsConstructor
-    @Getter
+    @Data
     public static class Response {
         private Long replyId;
         private Long userId;
         private String writer;
         private String role;
         private String comment;
+        private List<ReplyDTO.Response> children = new ArrayList<>();
         private String createdDate;
         /* Entity -> Dto*/
         public Response(Reply reply) {

@@ -31,6 +31,7 @@ public class BoardService {
     private final BoardLikeRepository boardLikeRepository;
     private final BoardImgRepository boardImgRepository;
     private final StoreRepository storeRepository;
+    private final ReplyRepository replyRepository;
 
     public String post(BoardDTO.Request req, List<String> imgPaths, Long userId) {
         postBlankCheck(imgPaths);
@@ -91,13 +92,8 @@ public class BoardService {
         return result;
     }
     public BoardDTO.Response makeDTO(Board board){
-        List<ReplyDTO.Response> replylist = new ArrayList<>();
-        if(board.getReplyList()!=null){
-            board.getReplyList().forEach(v->
-                    replylist.add(new ReplyDTO.Response(v)));
-        }
+        List<ReplyDTO.Response> replylist = replyRepository.getReplyListByBoard(board.getId());
 
-        //List<BoardImg> imgList = boardImgRepository.findAllByBoardId(boardId);
         List<String> imgUrlList = new ArrayList<>();
         board.getBoardImgList().forEach(v->{
             imgUrlList.add(v.getImageUrl());
