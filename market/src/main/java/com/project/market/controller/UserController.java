@@ -41,6 +41,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(status);
     }
 
+    @GetMapping("/userId/{userId}/exists")
+    public ResponseEntity checkIdDuplicate(@PathVariable String userId){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.checkUserIdDuplicaton(userId));
+    }
+    @GetMapping("/nickname/{nickname}/exists")
+    public ResponseEntity checkNicknameDuplicate(@PathVariable String nickname){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.checkNicknameDuplicaton(nickname));
+    }
+    @GetMapping("/email/{email}/exists")
+    public ResponseEntity checkEmailDuplicate(@PathVariable String email){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.checkEmailDuplicaton(email));
+    }
+
     @GetMapping("/profile")
     public ResponseEntity profileByLoginuser(@AuthenticationPrincipal UserPrincipal loginUser) {
         Map<String, Object> res = new HashMap<>();

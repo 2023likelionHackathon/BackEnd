@@ -50,4 +50,29 @@ public class UserService {
         }
         return "SUCCESS";
     }
+
+    @Transactional(readOnly = true)
+    public String checkUserIdDuplicaton(String userId){
+        boolean useridDuplication = userRepository.existsByUserId(userId);
+        if(useridDuplication){
+            throw new AlreadyExistsException("이미 존재하는 아이디입니다.");
+        }
+        return "SUCCESS";
+    }
+    @Transactional(readOnly = true)
+    public String checkNicknameDuplicaton(String nickname){
+        boolean nicknameDuplication = userRepository.existsByNickname(nickname);
+        if(nicknameDuplication){
+            throw new AlreadyExistsException("이미 존재하는 닉네임입니다.");
+        }
+        return "SUCCESS";
+    }
+    @Transactional(readOnly = true)
+    public String checkEmailDuplicaton(String userId){
+        boolean emailDuplication = userRepository.existsByUserId(userId);
+        if(emailDuplication){
+            throw new AlreadyExistsException("이미 존재하는 이메일입니다.");
+        }
+        return "SUCCESS";
+    }
 }
