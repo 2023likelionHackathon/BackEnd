@@ -46,6 +46,7 @@ public class BoardService {
             boardImgRepository.save(img);
             imgList.add(img.getImageUrl());
         });
+        user.updateReward();
 
         return "SUCCESS";
     }
@@ -67,7 +68,6 @@ public class BoardService {
 
         Board new_board = Board.builder()
                 .id(id)
-                .title(req.getTitle())
                 .content(req.getContent())
                 .build();
         boardRepository.save(new_board);

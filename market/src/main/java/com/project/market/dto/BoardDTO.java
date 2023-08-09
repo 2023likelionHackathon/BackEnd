@@ -17,7 +17,6 @@ public class BoardDTO {
     @Builder
     public static class Request{
         private Long store_id;
-        private String title;
         private String content;
         private Double score;
 
@@ -25,7 +24,6 @@ public class BoardDTO {
             return Board.builder()
                     .user(user)
                     .store(store)
-                    .title(title)
                     .content(content)
                     .score(score).build();
         }
@@ -40,7 +38,6 @@ public class BoardDTO {
         private String writer;
         private Long storeId;
         private String storeName;
-        private String title;
         private String content;
         private Double score;
         private int likes;

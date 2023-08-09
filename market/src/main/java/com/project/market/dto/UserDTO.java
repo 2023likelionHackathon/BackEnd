@@ -52,5 +52,6 @@ public class UserDTO {
         private String userId;
         private String nickname;
         private String role;
+        private int reward;
     }
 }

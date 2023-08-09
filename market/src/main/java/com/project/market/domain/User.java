@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
+@DynamicInsert
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +40,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name="role", nullable = false)
     private Role role;
+    @Column(nullable = false)
+    private int reward;
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // board 정렬
@@ -65,6 +69,11 @@ public class User extends BaseTimeEntity {
                 .id(id)
                 .userId(userId)
                 .nickname(nickname)
+                .reward(reward)
                 .role(role.getTitle()).build();
+    }
+
+    public void updateReward() {
+        this.reward += 500;
     }
 }

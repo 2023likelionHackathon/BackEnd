@@ -29,10 +29,6 @@ public class Board extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
-
-    @Column(name = "title", nullable = false)
-    private String title;
-
     @Column(name = "content")
     private String content;
     private Double score;
@@ -62,7 +58,6 @@ public class Board extends BaseTimeEntity {
                 .writer(user.getNickname())
                 .storeId(store.getId())
                 .storeName(store.getName())
-                .title(title)
                 .content(content)
                 .score(score)
                 .likes(likes)
