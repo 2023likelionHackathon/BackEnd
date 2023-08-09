@@ -5,6 +5,7 @@ import com.project.market.s3.S3Service;
 import com.project.market.dto.UserDTO;
 import com.project.market.security.UserPrincipal;
 import com.project.market.service.BoardService;
+import com.project.market.service.MailService;
 import com.project.market.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
     private final S3Service s3Service;
+    private final MailService mailService;
     @PostMapping("/join")
     public ResponseEntity register(@RequestPart("img") MultipartFile multipartFile,
                                    @RequestPart("user") @Valid UserDTO.Request req){
@@ -54,6 +56,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.checkEmailDuplicaton(email));
     }
 
+    // 이메일 인증
+    @PostMapping("/mailConfirm")
+    String mailConfirm(@RequestParam("email") String email) throws Exception {
+        String code = mailService.sendSimpleMessage(email);
+        log.info("인증코드 : {}", code);
+        return code;
+    }
     @GetMapping("/profile")
     public ResponseEntity profileByLoginuser(@AuthenticationPrincipal UserPrincipal loginUser) {
         Map<String, Object> res = new HashMap<>();
