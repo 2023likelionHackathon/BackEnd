@@ -38,7 +38,6 @@ public class AuthenticationController {
     // 로그인
     @PostMapping
     public ResponseEntity authenticationUsernamePassword(@Valid @RequestBody AuthorizationDTO authorizationRequest, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response){
-
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authorizationRequest.getUsername(), authorizationRequest.getPassword()));
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

@@ -1,6 +1,7 @@
 package com.project.market.service;
 
 import com.project.market.exception.SendMessageFailException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,11 +13,10 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
-
+@RequiredArgsConstructor
 @Service
 public class MailService {
-    @Autowired
-    JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
 
     private String ePw; // 인증번호
 

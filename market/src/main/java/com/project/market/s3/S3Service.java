@@ -70,6 +70,7 @@ public class S3Service {
     }
     // 이미지파일명 중복 방지
     private String createFileName(String fileName) {
+        // 랜덤 파일명 + 확장자
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
     // 파일 유효성 검사
@@ -90,6 +91,7 @@ public class S3Service {
         if (!fileValidate.contains(idxFileName)) {
             throw new ImageUploadException();
         }
+        // 확장자 반환
         return fileName.substring(fileName.lastIndexOf("."));
     }
 }

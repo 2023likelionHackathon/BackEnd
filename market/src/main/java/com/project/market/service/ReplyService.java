@@ -48,6 +48,7 @@ public class ReplyService {
             reply.updateParent(postChildReply(request.getParentId()));
         }
         replyRepository.save(reply);
+        board.addReply();
         return makeReplyList(board.getId());
     }
 

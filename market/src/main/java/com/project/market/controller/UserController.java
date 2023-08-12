@@ -32,12 +32,8 @@ public class UserController {
     private final S3Service s3Service;
     private final MailService mailService;
     @PostMapping("/join")
-    public ResponseEntity register(@RequestPart("img") MultipartFile multipartFile,
-                                   @RequestPart("user") @Valid UserDTO.Request req){
+    public ResponseEntity register(@RequestBody @Valid UserDTO.Request req){
         String imgUrl = null;
-        if(multipartFile != null){
-            imgUrl = s3Service.uploadImage(multipartFile);
-        }
         log.info("controller imgUrl=>{}",imgUrl);
         String status = userService.register(req, imgUrl);
         return ResponseEntity.status(HttpStatus.OK).body(status);

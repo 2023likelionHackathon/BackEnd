@@ -68,8 +68,8 @@ public class UserService {
         return "SUCCESS";
     }
     @Transactional(readOnly = true)
-    public String checkEmailDuplicaton(String userId){
-        boolean emailDuplication = userRepository.existsByUserId(userId);
+    public String checkEmailDuplicaton(String email){
+        boolean emailDuplication = userRepository.existsByEmail(email);
         if(emailDuplication){
             throw new AlreadyExistsException("이미 존재하는 이메일입니다.");
         }

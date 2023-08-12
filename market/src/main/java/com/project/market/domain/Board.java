@@ -33,12 +33,12 @@ public class Board extends BaseTimeEntity {
     private String content;
     private Double score;
     private int likes;
+    private int size_reply;
     @BatchSize(size = 1000)
     @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<BoardImg> boardImgList;
 
-    @BatchSize(size = 1000)
     @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     @OrderBy("id asc") // 댓글 정렬
@@ -50,8 +50,9 @@ public class Board extends BaseTimeEntity {
     public void addlike() {
         this.likes += 1;
     }
+    public void addReply(){this.size_reply+=1;}
 
-    public BoardDTO.Response toDTO(List<ReplyDTO.Response> replylist, List<String> imgList) {
+    public BoardDTO.Response toDTO(List<String> imgList) {
         return BoardDTO.Response.builder()
                 .boardId(id)
                 .userId(user.getId())
@@ -63,6 +64,6 @@ public class Board extends BaseTimeEntity {
                 .likes(likes)
                 .imgUrlList(imgList)
                 .createdDate(this.getCreatedDate().toString())
-                .replyList(replylist).build();
+                .size_reply(size_reply).build();
     }
 }

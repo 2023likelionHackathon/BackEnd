@@ -42,7 +42,7 @@ public class BoardDTO {
         private Double score;
         private int likes;
         private List<String> imgUrlList;
-        private List<ReplyDTO.Response> replyList;
+        private int size_reply;
 
         private String createdDate;
 

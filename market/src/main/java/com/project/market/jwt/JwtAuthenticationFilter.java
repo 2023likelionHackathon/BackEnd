@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             username = jwtProvider.extractUsername(jwt);
         }
         /*
-         * 토큰에서 username을 정상저긍로 추출할 수 있고
+         * 토큰에서 username을 정상적으로 추출할 수 있고
          * SecurityContextHolder 내에 authentication 객체(이전에 인증된 정보)가 없는 상태인지를 검사한다.
          */
         if(username!=null && SecurityContextHolder.getContext().getAuthentication() == null){

@@ -92,24 +92,27 @@ public class BoardService {
         return result;
     }
     public BoardDTO.Response makeDTO(Board board){
-        List<ReplyDTO.Response> replylist = replyRepository.getReplyListByBoard(board.getId());
+        //List<ReplyDTO.Response> replylist = replyRepository.getReplyListByBoard(board.getId());
 
         List<String> imgUrlList = new ArrayList<>();
         board.getBoardImgList().forEach(v->{
             imgUrlList.add(v.getImageUrl());
         });
-        return board.toDTO(replylist, imgUrlList);
+        return board.toDTO(imgUrlList);
     }
 
-    public Integer like(Long id, Long userId) {
+    public Map<String, Object> like(Long id, Long userId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(()-> new NonExistentBoardException());
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new NonExistentUserException());
+        Map<String, Object> map = new HashMap<>();
+
         BoardLike boardLike = boardLikeRepository.findByBoardIdAndUserId(board.getId(), user.getId());
         if(boardLike !=  null) {
             board.deletelike();
             boardLikeRepository.delete(boardLike);
+            map.put("isLiked",false);
         }
         else{
             boardLike = BoardLike.builder()
@@ -118,9 +121,10 @@ public class BoardService {
                     .build();
             boardLikeRepository.save(boardLike);
             board.addlike();
+            map.put("isLiked", true);
         }
-
-        return board.getLikes();
+        map.put("likes", board.getLikes());
+        return map;
     }
 
     public List<BoardDTO.Response> selectByUser(Long userId) {
