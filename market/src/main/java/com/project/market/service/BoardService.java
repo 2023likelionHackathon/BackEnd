@@ -87,7 +87,7 @@ public class BoardService {
         List<Board> boardList = boardRepository.findAll(sort);
         List<BoardDTO.Response> result = new ArrayList<>();
         boardList.forEach(v->{
-            result.add(select(v.getId()));
+            result.add(makeDTO(v));
         });
         return result;
     }

@@ -37,6 +37,7 @@ public class BoardDTO {
         private Long boardId;
         private Long userId;
         private String writer;
+        private String writer_pic;
         private Long storeId;
         private String storeName;
         private String content;

@@ -39,6 +39,7 @@ public class ReplyDTO {
         private Long replyId;
         private Long userId;
         private String writer;
+        private String writer_pic;
         private String role;
         private String comment;
         private List<ReplyDTO.Response> children = new ArrayList<>();
@@ -48,6 +49,7 @@ public class ReplyDTO {
             this.replyId = reply.getId();
             this.userId = reply.getUser().getId();
             this.writer = reply.getUser().getNickname();
+            this.writer_pic = reply.getUser().getPicture();
             this.role = reply.getRole();
             this.comment = reply.getReply();
             this.createdDate = reply.getCreatedDate().toString();

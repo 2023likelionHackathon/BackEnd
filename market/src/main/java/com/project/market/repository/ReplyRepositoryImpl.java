@@ -22,6 +22,7 @@ public class ReplyRepositoryImpl implements ReplyRepositoryCustom{
     public List<ReplyDTO.Response> getReplyListByBoard(Long boardId) {
         List<Reply> replyList = jpaQueryFactory.selectFrom(reply1)
                 .leftJoin(reply1.parent)
+                .leftJoin(reply1.user)
                 .fetchJoin()
                 .where(reply1.board.id.eq(boardId))
                 .orderBy(reply1.parent.id.asc().nullsFirst(), reply1.createdDate.asc())

@@ -33,7 +33,7 @@ public class Market {
 
     private String num;
 
-    private String close;
+    private String time;
 
     private String parking;
 
@@ -47,7 +47,8 @@ public class Market {
                 .id(id)
                 .name(name)
                 .intro(intro)
-                .address(address).build();
+                .address(address)
+                .imgUrl(imgUrl).build();
     }
 
     public MarketDTO.Detail toDetailDto() {

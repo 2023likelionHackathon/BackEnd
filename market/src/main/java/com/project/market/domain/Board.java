@@ -59,6 +59,7 @@ public class Board extends BaseTimeEntity {
                 .boardId(id)
                 .userId(user.getId())
                 .writer(user.getNickname())
+                .writer_pic(user.getPicture())
                 .storeId(store.getId())
                 .storeName(store.getName())
                 .content(content)

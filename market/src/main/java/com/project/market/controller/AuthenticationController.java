@@ -37,10 +37,11 @@ public class AuthenticationController {
 
     // 로그인
     @PostMapping
-    public ResponseEntity authenticationUsernamePassword(@Valid @RequestBody AuthorizationDTO authorizationRequest, BindingResult bindingResult, HttpServletRequest request, HttpServletResponse response){
+    public ResponseEntity authenticationUsernamePassword(@Valid @RequestBody AuthorizationDTO authorizationRequest, HttpServletRequest request, HttpServletResponse response){
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authorizationRequest.getUsername(), authorizationRequest.getPassword()));
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            log.info(userPrincipal.getPassword());
             String status = generateTokenCookie(userPrincipal, request, response);
             log.info("loginUser => {}", userPrincipal.getId());
             return ResponseEntity.status(HttpStatus.OK).body(status);
