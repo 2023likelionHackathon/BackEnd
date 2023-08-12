@@ -29,17 +29,6 @@ public class BoardController {
 
     private final S3Service s3Service;
 
-    @GetMapping("test")
-    public ResponseEntity test(){
-        Map<String, Object> map = new HashMap<>();
-        map.put("user", "김채원");
-        map.put("postImage","https://s3.ap-northeast-2.amazonaws.com/markeybucket/post/image/b118de25-bb26-413f-96af-1ab70afa2cb1.jpg");
-        map.put("likes",3);
-        map.put("timeStamp","2023-07-30T19:03:19.456967");
-        map.put("chats", 3);
-        return ResponseEntity.status(HttpStatus.OK).body(map);
-    }
-
     @PostMapping("/post")
     public ResponseEntity post(@RequestPart("boardDto") BoardDTO.Request req,
                                @RequestPart("imgUrl")List<MultipartFile> multipartFiles,

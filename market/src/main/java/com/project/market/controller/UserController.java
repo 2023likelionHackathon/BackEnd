@@ -29,7 +29,6 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final BoardService boardService;
-    private final S3Service s3Service;
     private final MailService mailService;
     @PostMapping("/join")
     public ResponseEntity register(@RequestBody @Valid UserDTO.Request req){

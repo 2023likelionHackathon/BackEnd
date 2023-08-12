@@ -93,12 +93,15 @@ public class BoardService {
     }
     public BoardDTO.Response makeDTO(Board board){
         //List<ReplyDTO.Response> replylist = replyRepository.getReplyListByBoard(board.getId());
-
+        Map<String, Object> likes = new HashMap<>();
+        boolean isLiked = boardLikeRepository.existsByBoardIdAndUserId(board.getId(), board.getUser().getId());
+        likes.put("isLiked", isLiked);
+        likes.put("likes_cnt",board.getLikes());
         List<String> imgUrlList = new ArrayList<>();
         board.getBoardImgList().forEach(v->{
             imgUrlList.add(v.getImageUrl());
         });
-        return board.toDTO(imgUrlList);
+        return board.toDTO(likes,imgUrlList);
     }
 
     public Map<String, Object> like(Long id, Long userId) {
@@ -123,7 +126,7 @@ public class BoardService {
             board.addlike();
             map.put("isLiked", true);
         }
-        map.put("likes", board.getLikes());
+        map.put("likes_cnt", board.getLikes());
         return map;
     }
 

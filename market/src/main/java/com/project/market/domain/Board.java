@@ -12,6 +12,8 @@ import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @NoArgsConstructor
 @AllArgsConstructor
@@ -52,7 +54,7 @@ public class Board extends BaseTimeEntity {
     }
     public void addReply(){this.size_reply+=1;}
 
-    public BoardDTO.Response toDTO(List<String> imgList) {
+    public BoardDTO.Response toDTO(Map<String, Object> likes, List<String> imgList) {
         return BoardDTO.Response.builder()
                 .boardId(id)
                 .userId(user.getId())

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 public class BoardDTO {
     @Data
@@ -40,7 +41,7 @@ public class BoardDTO {
         private String storeName;
         private String content;
         private Double score;
-        private int likes;
+        private Map<String, Object> likes;
         private List<String> imgUrlList;
         private int size_reply;
 
