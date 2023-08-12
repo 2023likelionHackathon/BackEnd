@@ -49,7 +49,7 @@ public class ReplyService {
         }
         replyRepository.save(reply);
         board.addReply();
-        return makeReplyList(board.getId());
+        return view(board.getId());
     }
 
     public Reply postChildReply(Long parentId){
@@ -67,9 +67,9 @@ public class ReplyService {
             throw new AuthenticationFailedException("자신이 작성한 글만 삭제 가능합니다.");
         }
         replyRepository.delete(reply);
-        return makeReplyList(reply.getBoard().getId());
+        return view(reply.getBoard().getId());
     }
-    public List<ReplyDTO.Response> makeReplyList(Long boardId){
+    public List<ReplyDTO.Response> view(Long boardId){
         return replyRepository.getReplyListByBoard(boardId);
     }
 }

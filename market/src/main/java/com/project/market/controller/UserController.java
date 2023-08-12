@@ -33,9 +33,7 @@ public class UserController {
     private final MailService mailService;
     @PostMapping("/join")
     public ResponseEntity register(@RequestBody @Valid UserDTO.Request req){
-        String imgUrl = null;
-        log.info("controller imgUrl=>{}",imgUrl);
-        String status = userService.register(req, imgUrl);
+        String status = userService.register(req);
         return ResponseEntity.status(HttpStatus.OK).body(status);
     }
 

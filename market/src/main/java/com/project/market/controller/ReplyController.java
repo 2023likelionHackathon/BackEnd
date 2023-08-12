@@ -25,6 +25,11 @@ public class ReplyController {
         List<ReplyDTO.Response> replyList = replyService.post(request, loginUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(replyList);
     }
+    @GetMapping("/view/{boardId}")
+    public ResponseEntity view(@PathVariable("boardId") Long boardId){
+        List<ReplyDTO.Response> replyList = replyService.view(boardId);
+        return ResponseEntity.status(HttpStatus.OK).body(replyList);
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity delete(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){

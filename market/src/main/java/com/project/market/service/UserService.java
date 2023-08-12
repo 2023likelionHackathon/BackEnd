@@ -33,7 +33,7 @@ public class UserService {
         return user.toProfileDto();
     }
 
-    public String register(UserDTO.Request req, String imgUrl) {
+    public String register(UserDTO.Request req) {
 
         Optional<User> optionalUser = userRepository.findByUserId(req.getUserId());
         if(optionalUser.isPresent()){
@@ -41,9 +41,9 @@ public class UserService {
         }
         String pass = passwordEncoder.encode(req.getPw());
         if(req.getRole().equals("USER")){
-            userRepository.save(req.toEntity(imgUrl, Role.USER, pass));
+            userRepository.save(req.toEntity("https://markeybucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%82%AC%EC%A7%84/%EC%82%AC%EC%9E%A5%EB%8B%98.png", Role.USER, pass));
         }else if(req.getRole().equals("MERCHANT")){
-            User user = userRepository.save(req.toEntity(imgUrl, Role.MERCHANT, pass));
+            User user = userRepository.save(req.toEntity("https://markeybucket.s3.ap-northeast-2.amazonaws.com/%ED%94%84%EB%A1%9C%ED%95%84%EC%82%AC%EC%A7%84/%EC%9D%BC%EB%B0%98%EC%82%AC%EC%9A%A9%EC%9E%90.png", Role.MERCHANT, pass));
             Store store = storeRepository.findByCode(req.getCode())
                     .orElseThrow(()-> new NonExistentStoreException());
             storeRepository.save(store.setMerchant(user));
