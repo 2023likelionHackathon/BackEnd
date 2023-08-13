@@ -2,6 +2,7 @@ package com.project.market.controller;
 
 import com.project.market.domain.Board;
 import com.project.market.dto.BoardDTO;
+import com.project.market.exception.AuthenticationFailedException;
 import com.project.market.exception.ImageUploadException;
 import com.project.market.repository.BoardRepository;
 import com.project.market.security.UserPrincipal;
@@ -9,6 +10,7 @@ import com.project.market.service.BoardService;
 import com.project.market.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +35,9 @@ public class BoardController {
     public ResponseEntity post(@RequestPart("boardDto") BoardDTO.Request req,
                                @RequestPart("imgUrl")List<MultipartFile> multipartFiles,
                                @AuthenticationPrincipal UserPrincipal loginUser){
+        if(loginUser == null){
+            throw new AuthenticationFailedException("권한이 없습니다. 로그인 후 사용해주세요.");
+        }
         if(multipartFiles == null){
             throw new ImageUploadException();
         }
@@ -43,13 +48,13 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(status);
     }
     @GetMapping("/viewAll")
-    public ResponseEntity viewAll(){
-        List<BoardDTO.Response> boardList = boardService.selectAll();
+    public ResponseEntity viewAll(@AuthenticationPrincipal UserPrincipal loginUser){
+        List<BoardDTO.Response> boardList = boardService.selectAll(loginUser);
         return ResponseEntity.status(HttpStatus.OK).body(boardList);
     }
     @GetMapping("/view/{id}")
-    public ResponseEntity view(@PathVariable("id") Long id){
-        BoardDTO.Response boardResponse = boardService.select(id);
+    public ResponseEntity view(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){
+        BoardDTO.Response boardResponse = boardService.select(id, loginUser);
 
         return ResponseEntity.status(HttpStatus.OK).body(boardResponse);
     }
@@ -67,6 +72,9 @@ public class BoardController {
 
     @PostMapping("/like/{id}")
     public ResponseEntity like(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){
+        if(loginUser == null){
+            throw new AuthenticationFailedException("권한이 없습니다. 로그인 후 사용해주세요.");
+        }
         Map<String, Object> map = new HashMap<>();
         // int(자료형, primitive type) => 산술연산 가능, null로 초기화 불가
         // Integer(래퍼 클래스, Wrapper class) => unboxing하지 않을 시 산술연산 불가능, null로 초기화 가능

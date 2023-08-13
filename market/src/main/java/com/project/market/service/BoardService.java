@@ -9,6 +9,7 @@ import com.project.market.exception.NonExistentBoardException;
 import com.project.market.exception.NonExistentStoreException;
 import com.project.market.exception.NonExistentUserException;
 import com.project.market.repository.*;
+import com.project.market.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -65,7 +66,6 @@ public class BoardService {
     }
 
     public String update(Long id, BoardDTO.Request req) {
-
         Board new_board = Board.builder()
                 .id(id)
                 .content(req.getContent())
@@ -74,27 +74,30 @@ public class BoardService {
         return "SUCCESS";
     }
 
-    public BoardDTO.Response select(Long boardId) {
+    public BoardDTO.Response select(Long boardId, UserPrincipal loginUser) {
 //        Board board = boardRepository.findBoardWithReply(boardId)
 //                .orElseThrow(()-> new NonExistentBoardException());
         Board board = boardRepository.findBoardById(boardId)
                 .orElseThrow(()-> new NonExistentBoardException());
-        return makeDTO(board);
+        return makeDTO(board, loginUser);
     }
 
-    public List<BoardDTO.Response> selectAll() {
+    public List<BoardDTO.Response> selectAll(UserPrincipal loginUser) {
         Sort sort = Sort.by(Sort.Direction.DESC, "id","createdDate");
         List<Board> boardList = boardRepository.findAll(sort);
         List<BoardDTO.Response> result = new ArrayList<>();
         boardList.forEach(v->{
-            result.add(makeDTO(v));
+            result.add(makeDTO(v, loginUser));
         });
         return result;
     }
-    public BoardDTO.Response makeDTO(Board board){
+    public BoardDTO.Response makeDTO(Board board, UserPrincipal loginUser){
         //List<ReplyDTO.Response> replylist = replyRepository.getReplyListByBoard(board.getId());
         Map<String, Object> likes = new HashMap<>();
-        boolean isLiked = boardLikeRepository.existsByBoardIdAndUserId(board.getId(), board.getUser().getId());
+        boolean isLiked = false;
+        if(loginUser != null){
+           isLiked  = boardLikeRepository.existsByBoardIdAndUserId(board.getId(), loginUser.getId());
+        }
         likes.put("isLiked", isLiked);
         likes.put("likes_cnt",board.getLikes());
         List<String> imgUrlList = new ArrayList<>();
@@ -130,16 +133,16 @@ public class BoardService {
         return map;
     }
 
-    public List<BoardDTO.Response> selectByUser(Long userId) {
+    public List<BoardDTO.Response> selectByUser(Long userId, UserPrincipal loginUser) {
         List<Board> boardList = boardRepository.findByUserId(userId);
         List<BoardDTO.Response> res = new ArrayList<>();
         boardList.forEach(v->{
-            res.add(makeDTO(v));
+            res.add(makeDTO(v, loginUser));
         });
         return res;
     }
 
-    public Map<String, Object> selectByStore(Long storeId) {
+    public Map<String, Object> selectByStore(Long storeId, UserPrincipal loginUser) {
         Map<String, Object> map = new HashMap<>();
         List<BoardWithAvg> boardList = boardRepository.findBoardWithAvgByStoreId(storeId);
         log.info("board userid = {}", boardList.get(0).getBoard().getUser().getUserId());
@@ -147,7 +150,7 @@ public class BoardService {
         log.info("board img = {}", boardList.get(0).getBoard().getBoardImgList().stream().count());
         List<BoardDTO.Response> board_res = new ArrayList<>();
         boardList.forEach(v->{
-            board_res.add(makeDTO(v.getBoard()));
+            board_res.add(makeDTO(v.getBoard(), loginUser));
         });
         map.put("boardList", board_res);
         Double storeAvg = boardList.get(0).getScoreAvg();

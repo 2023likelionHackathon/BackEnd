@@ -35,11 +35,11 @@ public class StoreDTO {
     @Data
     public static class Detail{
         private Long id;
-        private String name;
-        private String intro;
-        private String address;
-        private String imgUrl;
+//        private String name;
+//        private String intro;
+//        private String address;
+//        private String imgUrl;
         private Double score;
-        private List<MenuDTO> menuList;
+//        private List<MenuDTO> menuList;
     }
 }

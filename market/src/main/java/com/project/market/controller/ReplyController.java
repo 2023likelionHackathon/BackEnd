@@ -1,6 +1,7 @@
 package com.project.market.controller;
 
 import com.project.market.dto.ReplyDTO;
+import com.project.market.exception.AuthenticationFailedException;
 import com.project.market.security.UserPrincipal;
 import com.project.market.service.ReplyService;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,9 @@ public class ReplyController {
     private ReplyService replyService;
     @PostMapping("/post")
     public ResponseEntity post(@RequestBody ReplyDTO.Request request, @AuthenticationPrincipal UserPrincipal loginUser){
+        if(loginUser == null){
+            throw new AuthenticationFailedException("권한이 없습니다. 로그인 후 사용해주세요.");
+        }
         log.info("loginUser id = {}", loginUser.getId());
         List<ReplyDTO.Response> replyList = replyService.post(request, loginUser.getId());
         return ResponseEntity.status(HttpStatus.OK).body(replyList);

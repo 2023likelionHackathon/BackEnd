@@ -68,11 +68,11 @@ public class Store {
         });
         return StoreDTO.Detail.builder()
                 .id(id)
-                .name(name)
-                .intro(intro)
-                .imgUrl(imgUrl)
+//                .name(name)
+//                .intro(intro)
+//                .imgUrl(imgUrl)
                 .score(avg)
-                .menuList(menuDtos)
+//                .menuList(menuDtos)
                 .build();
     }
 }

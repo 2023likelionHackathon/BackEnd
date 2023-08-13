@@ -1,6 +1,7 @@
 package com.project.market.controller;
 
 import com.project.market.dto.BoardDTO;
+import com.project.market.exception.AuthenticationFailedException;
 import com.project.market.s3.S3Service;
 import com.project.market.dto.UserDTO;
 import com.project.market.security.UserPrincipal;
@@ -58,19 +59,22 @@ public class UserController {
     }
     @GetMapping("/profile")
     public ResponseEntity profileByLoginuser(@AuthenticationPrincipal UserPrincipal loginUser) {
+        if(loginUser == null){
+            throw new AuthenticationFailedException("권한이 없습니다. 로그인 후 사용해주세요.");
+        }
         Map<String, Object> res = new HashMap<>();
         UserDTO.Profile user = userService.viewUser(loginUser.getId());
         res.put("user", user);
-        List<BoardDTO.Response> boardList = boardService.selectByUser(loginUser.getId());
+        List<BoardDTO.Response> boardList = boardService.selectByUser(loginUser.getId(), loginUser);
         res.put("boardList", boardList);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
     @GetMapping("/profile/{id}")
-    public ResponseEntity profile(@PathVariable("id") Long id) {
+    public ResponseEntity profile(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser) {
         Map<String, Object> res = new HashMap<>();
         UserDTO.Profile user = userService.viewUser(id);
         res.put("user", user);
-        List<BoardDTO.Response> boardList = boardService.selectByUser(id);
+        List<BoardDTO.Response> boardList = boardService.selectByUser(id, loginUser);
         res.put("boardList", boardList);
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
