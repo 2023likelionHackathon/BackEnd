@@ -72,6 +72,7 @@ public class BoardController {
 
     @PostMapping("/like/{id}")
     public ResponseEntity like(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){
+        log.info("loginUser={}",loginUser);
         if(loginUser == null){
             throw new AuthenticationFailedException("권한이 없습니다. 로그인 후 사용해주세요.");
         }

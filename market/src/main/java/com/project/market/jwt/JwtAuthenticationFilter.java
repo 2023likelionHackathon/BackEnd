@@ -4,6 +4,7 @@ import com.project.market.security.UserDetailsServiceImpl;
 import com.project.market.security.UserPrincipal;
 import com.project.market.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -32,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = null;
 
         Optional<Cookie> jwtCookie = CookieUtils.getCookie(request, "access_token");
-
+        log.info("jwt = {}", jwtCookie);
         if (jwtCookie.isPresent()){
             jwt = jwtCookie.get().getValue();
             username = jwtProvider.extractUsername(jwt);

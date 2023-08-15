@@ -1,13 +1,16 @@
 package com.project.market.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
-
+@Slf4j
 public class CookieUtils {
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name){
         Cookie[] cookies = request.getCookies();
+        //log.info("cookies len = {}",cookies.length);
         if(cookies!= null && cookies.length>0){
             for(Cookie cookie : cookies){
                 if(cookie.getName().equals(name)){
@@ -27,6 +30,8 @@ public class CookieUtils {
         cookie.setSecure(secure);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
+        // Set-Cookie 헤더를 추가하여 쿠키를 클라이언트에게 전송
+        response.setHeader("Set-Cookie", String.format("%s=%s; Max-Age=%d; Domain=domarketdodo.shop; Path=/; HttpOnly;", name, value, maxAge));
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
