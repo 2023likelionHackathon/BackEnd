@@ -145,9 +145,15 @@ public class BoardService {
     public Map<String, Object> selectByStore(Long storeId, UserPrincipal loginUser) {
         Map<String, Object> map = new HashMap<>();
         List<BoardWithAvg> boardList = boardRepository.findBoardWithAvgByStoreId(storeId);
-        log.info("board userid = {}", boardList.get(0).getBoard().getUser().getUserId());
-        log.info("board reply = {}", boardList.get(0).getBoard().getReplyList().stream().count());
-        log.info("board img = {}", boardList.get(0).getBoard().getBoardImgList().stream().count());
+//        log.info("board userid = {}", boardList.get(0).getBoard().getUser().getUserId());
+//        log.info("board reply = {}", boardList.get(0).getBoard().getReplyList().stream().count());
+//        log.info("board img = {}", boardList.get(0).getBoard().getBoardImgList().stream().count());
+
+        log.info("boardList size = {}", boardList.size());
+        log.info("boardList = {}", boardList.get(0));
+        if (boardList.get(0).getBoard()==null){
+            return map;
+        }
         List<BoardDTO.Response> board_res = new ArrayList<>();
         boardList.forEach(v->{
             board_res.add(makeDTO(v.getBoard(), loginUser));

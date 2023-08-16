@@ -28,6 +28,9 @@ public class StoreController {
     public ResponseEntity viewStore(@PathVariable("id") Long id, @AuthenticationPrincipal UserPrincipal loginUser){
         Map<String, Object> res = new HashMap<>();
         Map<String, Object> map = boardService.selectByStore(id, loginUser);
+        if (map==null){
+            return ResponseEntity.status(HttpStatus.OK).body("해당 점포에 대한 글이 존재하지 않습니다.");
+        }
         res.put("boardList", map.get("boardList"));
         StoreDTO.Detail store = StoreDTO.Detail.builder()
                 .id(id)
