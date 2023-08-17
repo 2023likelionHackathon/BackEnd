@@ -38,7 +38,7 @@ public class ReplyService {
                 .orElseThrow(()-> new NonExistentUserException());
 
         Reply reply;
-        if(board.getStore().getUser().equals(user)){
+        if(board.getStore().getUser()!=null && board.getStore().getUser().equals(user)){
             reply = request.toEntity(user, board, "사장님");
         }else{
             reply = request.toEntity(user, board, "이용자");
